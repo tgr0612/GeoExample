@@ -284,41 +284,50 @@ var addCoffeeShop = function(database, name, address, tel, longitude, latitude, 
 		}
 	};
 
+	var findWithin2 = function(req, res) {
+		console.log('coffeeshop 모듈 안에 있는 findWithin2 호출됨.');
 
+		var paramLongitude = req.param('longitude');
+		var paramLatitude = req.param('latitude');
 
+		var paramTopLeftLongitude = req.param('topleft_longitude');
+		var paramTopLeftLatitude = req.param('topleft_latitude');
+		var paramBottomRightLongitude = req.param('bottomright_longitude');
+		var paramBottomRightLatitude = req.param('bottomright_latitude');
 
+		var database = req.app.get('database');
 
+		if (database.db) {
+			// 1. 가까운 커피숍 검색
+			database.CoffeeShopModel.findWithin(paramTopLeftLongitude, paramTopLeftLatitude, paramBottomRightLongitude, paramBottomRightLatitude, function(err, results) {
+				if (err) { throw err; }
 
+				if (results) {
+					console.dir(results);
 
+					if (results.length > 0) {
+						res.render('findwithin.ejs', {result: results[0]._doc, paramLongitude: paramLongitude, paramLatitude: paramLatitude,
+													paramTopLeftLongitude: paramTopLeftLongitude, paramTopLeftLatitude: paramTopLeftLatitude,
+													paramBottomRightLongitude: paramBottomRightLongitude, paramBottomRightLatitude: paramBottomRightLatitude});
+					} else {
+						res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+						res.write('<h2>영역 내 커피숍 데이터가 없습니다.</h2>');
+						res.end();
+					}
 
+				} else {
+					res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+					res.write('<h2>영역 내 커피숍 조회  실패</h2>');
+					res.end();
+				}
+			});
+		} else {
+			res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+			res.write('<h2>데이터베이스 연결 실패</h2>');
+			res.end();
+		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	};
 
 
 module.exports.add =add;
@@ -327,3 +336,4 @@ module.exports.findNear = findNear;
 module.exports.findWithin = findWithin;
 module.exports.findCircle = findCircle;
 module.exports.findNear2 = findNear2;
+module.exports.findWithin2 = findWithin2;
