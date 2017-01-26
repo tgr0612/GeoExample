@@ -246,6 +246,44 @@ var addCoffeeShop = function(database, name, address, tel, longitude, latitude, 
 
 	};
 
+	var findNear2 = function(req, res){
+		console.log('coffeeshop 모듈안에 있는 findNear2 호출됨');
+
+		var paramLongitude = req.param('longitude');
+		var paramLatitude =  req.param('latitude');
+		var maxDistance =  1000;
+
+		var database = req.app.get('database');
+
+		if(database.db){
+			//1. 가까운 카페 검색
+			database.CoffeeShopModel.findNear(paramLongitude,
+			paramLatitude, maxDistance, function(err, results){
+				if(err) {throw err;}
+				if(results){
+					console.dir(results);
+
+					if(results.length>0){
+						res.render('findnear.ejs', {result:results[0]._doc, paramLatitude: paramLatitude, paramLongitude: paramLongitude});
+					}else{
+						res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+						res.write('<h2>가까운 커피숍 데이터가 없습니다.</h2>');
+						res.end();
+					}
+
+				}else {
+					res.writeHead('200', {'Content-Type' : 'text/html;charset=utf8'});
+					res.write('<h2>가까운 카페 조회 실패</h2>');
+					res.end();
+				}
+			});
+		} else {
+			res.writeHead('200', {'Content-Type':'text/html;charset=utf8'});
+			res.write('<h2>데이터베이스 연결 실패</h2>');
+			res.end();
+		}
+	};
+
 
 
 
@@ -288,3 +326,4 @@ module.exports.list =list;
 module.exports.findNear = findNear;
 module.exports.findWithin = findWithin;
 module.exports.findCircle = findCircle;
+module.exports.findNear2 = findNear2;
