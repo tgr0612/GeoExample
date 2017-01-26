@@ -22,6 +22,16 @@ Schema.createSchema = function(mongoose) {
 	CoffeeShopSchema.static('findAll', function(callback) {
 		return this.find({}, callback);
 	});
+  //가장 가까운 카페 조회
+  CoffeeShopSchema.static('findNear', function(longitude, latitude, maxDistance, callback){
+    console.log('CoffeeShopSchema의 findNear 호출됨.');
+
+    this.find().where('geometry').near({center:{type:'Point', coordinates:[parseFloat(longitude), parseFloat(latitude)]}, maxDistance:maxDistance}).limit(1).exec(callback);
+	});
+
+
+
+
   console.log('CoffeeShopSchema 정의함.');
 
   	return CoffeeShopSchema;
