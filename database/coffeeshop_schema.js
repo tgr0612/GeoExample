@@ -29,7 +29,12 @@ Schema.createSchema = function(mongoose) {
     this.find().where('geometry').near({center:{type:'Point', coordinates:[parseFloat(longitude), parseFloat(latitude)]}, maxDistance:maxDistance}).limit(1).exec(callback);
 	});
 
+	// 일정 범위 내의 커피숍 조회
+		CoffeeShopSchema.static('findWithin', function(topleft_longitude, topleft_latitude, bottomright_longitude, bottomright_latitude, callback) {
+			console.log('CoffeeShopSchema의 findWithin 호출됨.');
 
+			this.find().where('geometry').within({box:[[parseFloat(topleft_longitude), parseFloat(topleft_latitude)], [parseFloat(bottomright_longitude), parseFloat(bottomright_latitude)]]}).exec(callback);
+		});
 
 
   console.log('CoffeeShopSchema 정의함.');
