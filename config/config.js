@@ -16,6 +16,7 @@ module.exports = {
 	    ,{file:'./coffeeshop', path:'/process/listcoffeeshop', method:'list', type:'post'}
 	    ,{file:'./coffeeshop', path:'/process/nearcoffeeshop', method:'findNear', type:'post'}
 			,{file:'./coffeeshop', path:'/process/withincoffeeshop', method:'findWithin', type:'post'}
+			,{file:'./coffeeshop', path:'/process/circlecoffeeshop', method:'findCircle', type:'post'}
 	],
 	facebook: {		// passport facebook
 		clientID: '1430738073626259',
