@@ -136,7 +136,7 @@ var addCoffeeShop = function(database, name, address, tel, longitude, latitude, 
 						res.write('    <li>#' + i + ' : ' + curName + ', ' + curAddress + ', ' + curTel + ', ' + curLongitude + ', ' + curLatitude + '</li>');
 					}
 
-					res.wrtie('</ul></div>');
+					res.write('</ul></div>');
 					res.end();
 				}else {
 					res.writeHead('200', {'Content-Type' : 'text/html;charset=utf8'});
